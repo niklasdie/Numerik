@@ -1,5 +1,7 @@
 # Aufgabe 3
 import math
+from time import time
+
 import numpy as np
 
 nums_n = [1, 2, 5, 10, 100, 1000, 100000]
@@ -28,7 +30,7 @@ def f1(x):
 
 
 def f2(x):
-    return math.log(x)
+    return np.log(x)
 
 
 def run():
@@ -58,6 +60,18 @@ def run():
 
 # Aufgabe 4
 
+
+def vektor2(f, a, b, n):
+    h = (b - a) / n
+    # v = np.array([ a+i*h for i in range(1, n)])
+    # v2 = np.array([f(x) for x in v])
+    # v2 = np.array([f(a+i*h) for i in range(1, n)])
+    v = np.array([a + i * h for i in range(1, n)])
+    v2 = f(v)
+    s = np.sum(v2) * 2 + f(a) + f(b)
+    return h / 2 * s
+
+
 def vektor(f, a, b, n):
     h = (b - a) / n
     vektor1 = []
@@ -73,20 +87,43 @@ def vektor(f, a, b, n):
 
 def run2():
     print('∫ 1/x² dx from 1/10 to 10:')
+    t = time()
     for n in nums_n:
         print('für n=' + str(n))
-        print(recheck_summe(f1, 0.1, 10, n))
-        print(trapezregel(f1, 0.1, 10, n))
-        print(vektor(f1, 0.1, 10, n))
+        print(time() - t)
+        t = time()
+        print("recheck_summe", recheck_summe(f1, 0.1, 10, n))
+        print(time() - t)
+        t = time()
+        print("traprezregel", trapezregel(f1, 0.1, 10, n))
+        print(time() - t)
+        t = time()
+        print("v1", vektor(f1, 0.1, 10, n))
+        print(time() - t)
+        t = time()
+        print("v2", vektor2(f1, 0.1, 10, n))
+        print(time() - t)
+        t = time()
         print()
 
     print()
     print('∫ ln(x) dx from 1 to 2:')
     for n in nums_n:
         print('für n=' + str(n))
-        print(recheck_summe(f2, 1, 2, n))
-        print(trapezregel(f2, 1, 2, n))
-        print(vektor(f2, 1, 2, n))
+        print(time() - t)
+        t = time()
+        print("summ", recheck_summe(f2, 1, 2, n))
+        print(time() - t)
+        t = time()
+        print("trapez", trapezregel(f2, 1, 2, n))
+        print(time() - t)
+        t = time()
+        print("v1", vektor(f2, 1, 2, n))
+        print(time() - t)
+        t = time()
+        print("v2", vektor2(f2, 1, 2, n))
+        print(time() - t)
+        t = time()
         print()
 
 
