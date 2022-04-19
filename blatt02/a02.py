@@ -1,17 +1,10 @@
 # Aufgabe 2
-import array
-import collections
-
 import numpy
-import pprint
-import scipy
-import scipy.linalg  # SciPy Linear Algebra Library
-
 
 def zerlegung(A):
     lu = A.copy()
     p = []
-    for zeile in range(lu.shape[0]):
+    for zeile in range(lu.shape[0]-1):
         # Diagonale != 0?
         if lu[zeile][zeile] == 0:
             for f in range(zeile, lu.shape[0]):
@@ -22,6 +15,8 @@ def zerlegung(A):
                     lu[f] = tmp
                     p.append(f + 1)
                     break
+        else:
+            p.append(zeile + 1)
 
         for y in range(zeile + 1, lu.shape[0]):
             div = int(lu[y][zeile] / lu[zeile][zeile])
