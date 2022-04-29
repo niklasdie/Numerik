@@ -33,6 +33,19 @@ def zerlegung(A):
     return np.array(lu), np.array(p)
 
 
+def nachiteration(A, b, x):
+    r = np.zeros(shape=(b.shape[0]), dtype=np.float32)
+    p = np.zeros(shape=(b.shape[0]), dtype=np.float32)
+    epsilon = 0.000001
+    while True:
+        r = np.subtract(b, np.matmul(A, x))
+        p = np.matmul(np.linalg.inv(A), r)
+        x = np.add(x, p)
+        if (np.linalg.norm(p)/np.linalg.norm(x)) < epsilon:
+            break
+    return x
+
+
 def permutation(p, u):
     c = np.copy(u)
     for x in range(len(p)):
@@ -76,12 +89,12 @@ def rueckwaerts(LU, y):
     return b
 
 
-def baueBeispiel(n):
+def baueBeispiel1(n):
     A = np.zeros(shape=(n, n), dtype=np.float32)
     for i in range(n):
         A[i][i] = 1
         A[i][n - 1] = 1
-        if (i > 0):
+        if i > 0:
             for j in range(i):
                 A[i][j] = -1
 
@@ -89,6 +102,21 @@ def baueBeispiel(n):
     b[n - 1] = 2 - n
     for i in range(0, n - 1):
         b[i] = 3 - i
+    return A, b
+
+
+def baueBeispiel2(n):
+    A = np.zeros(shape=(n, n), dtype=np.float32)
+    for i in range(n):
+        for j in range(n):
+            A[i][i] = 1
+            if j > i:
+                A[i][j] = 0
+            if j < i:
+                A[i][j] = i + j
+
+    b = np.zeros(shape=(n), dtype=np.float32)
+    b[0] = 1
     return A, b
 
 
@@ -100,7 +128,8 @@ A1 = np.array(
 b1 = np.array([3, 5, 4, 5])
 # x = [0.0, 1.0, 2.0, 3.0]
 
-n = [50, 70, 100]
+n1 = [50, 70, 100]
+n2 = [5, 10, 15]
 
 if __name__ == '__main__':
     np.set_printoptions(precision=3, suppress=True)
@@ -109,9 +138,19 @@ if __name__ == '__main__':
     LU, p = zerlegung(A1)
     c = permutation(p, b1)
     rueckwaerts(LU, vorwaerts(LU, c))
-    for i in n:
+    print("\nAufgabe 2a:")
+    for i in n1:
         print(f"\nn={i}")
-        A, b = baueBeispiel(i)
+        A, b = baueBeispiel1(i)
         LU, p = zerlegung(A)
         c = permutation(p, b)
-        rueckwaerts(LU, vorwaerts(LU, c))
+        x = rueckwaerts(LU, vorwaerts(LU, c))
+        print(f"Nachiteration: x =  {nachiteration(A, b, x)}")
+    print("\nAufgabe 2b:")
+    for i in n2:
+        print(f"\nn={i}")
+        A, b = baueBeispiel1(i)
+        LU, p = zerlegung(A)
+        c = permutation(p, b)
+        x = rueckwaerts(LU, vorwaerts(LU, c))
+        print(f"Nachiteration: x = {nachiteration(A, b, x)}")
