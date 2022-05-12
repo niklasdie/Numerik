@@ -44,7 +44,7 @@ def cg_verfahren(A, b):
     p = r
     r0 = r
     k = 1
-    while k >= 0.0000001:
+    while k > 1.0e-6:
         alpha = r.dot(r) / p.dot(A.dot(p))
         x = x + alpha * p
         r_new = r - (alpha * A).dot(p)
@@ -65,5 +65,6 @@ if __name__ == '__main__':
         x = cg_verfahren(A, b)
         ref = np.linalg.solve(A, b)
         print(f"x = {x}")
-        print(f"ref = {x}\n")
+        print(f"ref = {ref}\n")
         plotxk(x)
+        plotxk(ref)

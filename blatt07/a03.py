@@ -37,7 +37,7 @@ def Ablock(m):
     return A.toarray()
 
 
-def ew_exakt(m):
+def ew_exakt(m): # LÄUFT NICHT BEI MIR !!!
     # exakte Eigenwerte fuer 2d-Laplace Blockmatrix, absteigend sortiert
     ew1d = 2.0 * (1.0 - np.cos((np.arange(m) + 1.0) * np.pi / (m + 1.0)))
 
@@ -176,12 +176,19 @@ if __name__ == '__main__':
     np.set_printoptions(precision=3, suppress=True)
     A, b = system(m)
     A = csr_matrix.toarray(A)
-    print(f"A = {A}")
-    v = np.linalg.eig(A)
-    print(f"v = {v}")
-    plotev(v[0])
-    animev(v[0])()
-    v = jacobi(A)
-    print(f"v = {v}")
-    plotev(v[0])
-    animev(v[0])()
+    print(f"A =\n{A}\n")
+    eig_w, eig_v = jacobi(A)
+    eig_w = np.sort(eig_w)
+    print(f"eig_v =\n{eig_v}")
+    print(f"eig_w =\n{eig_w}")
+    plotev(eig_v[0])
+    animev(eig_v[0])()
+    A, b = system(m)
+    A = csr_matrix.toarray(A)
+    eig_w, eig_v = np.linalg.eig(A)
+    eig_w = np.sort(eig_w)
+    print("\nKontrolle:")
+    print(f"eig_v =\n{eig_v}")
+    print(f"eig_w =\n{eig_w}")
+    plotev(eig_v[0])
+    animev(eig_v[0])()
