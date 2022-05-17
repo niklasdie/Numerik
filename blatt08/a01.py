@@ -1,5 +1,6 @@
 import math
 from time import time
+import numpy as np
 
 
 def newton(a, c, d, x0, y):
@@ -9,6 +10,7 @@ def newton(a, c, d, x0, y):
         xkp1 = xk - ((b(a, c, d, xk) - y) / b_abl(a, c, d, xk))
         it += 1
         if xkp1 == xk:
+            print(f"xkp1 = {xkp1} = {xk} = xk ?")
             return xkp1, it
         xk = xkp1
 
@@ -22,6 +24,7 @@ def sekante(a, c, d, xm1, x0, y):
         xkp1 = xk - (((xk - xkm1) * b_von_xk) / (b_von_xk - (b(a, c, d, xkm1) - y)))
         it += 1
         if xk == xkp1:
+            print(f"xkp1 = {xkp1} = {xk} = xk ?")
             return xkp1, it
         xk = xkp1
 
@@ -39,6 +42,7 @@ c = -1.1085e25
 d = 0.029
 
 if __name__ == '__main__':
+    np.set_printoptions(precision=3, suppress=True)
     t = time()
     n, it = newton(a, c, d, 1961, 9)
     print(f"newton = {n} mit {it} iterations in {time() - t} seconds")
